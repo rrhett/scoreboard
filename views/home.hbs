@@ -1,0 +1,57 @@
+<html>
+<head>
+<script src="main.js" type="module" defer></script>
+<title>Game Board</title>
+<style>
+html {
+  font-size: 24px;
+}
+#round {
+  text-align: center;
+}
+#dealer {
+  text-align: center;
+}
+h1 {
+  text-align: center;
+}
+.went-out {
+  color: #0f0;
+  font-size: larger;
+}
+.in-the-lead {
+  background-color: #0f04;
+  font-size: larger;
+}
+table {
+  font-size: 24px;
+  margin: auto;
+  border-collapse: collapse;
+  border: 1px solid #000;
+}
+th {
+  border-bottom: solid 1px #000;
+}
+td {
+  padding: 2px 60px;
+  text-align: right;
+}
+.inner-score {
+  border-left: solid 1px #000;
+  border-right: solid 1px #000;
+}
+.bottom-row {
+  border-bottom: solid 1px #000;
+}
+</style>
+</head>
+<body>
+
+<h1>Five Crowns</h1>
+
+<div id="round" class="round"></div>
+<div id="dealer" class="dealer"></div>
+<div id="scores"></div>
+
+</body>
+</html>

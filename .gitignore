@@ -13,6 +13,9 @@ dist/
 # Compiled Python bytecode
 *.py[cod]
 
+# swap files
+*.sw[p]
+
 # Log files
 *.log
 

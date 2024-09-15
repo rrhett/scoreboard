@@ -63,3 +63,9 @@ document.getElementById('player').focus();
 function post() {
   socket.emit('state', state);
 }
+
+socket.on('connect', (socket) => {
+  // If we lost connectivity and come back, go ahead and post whatever we
+  // currently have.
+  post();
+});

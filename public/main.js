@@ -7,6 +7,7 @@ socket.on('state', (state) => {
   if (!state.players || state.players.length == 0) {
     document.getElementById('round').innerHTML = 'Waiting for players...';
     document.getElementById('dealer').innerHTML = '';
+    document.getElementById('scores').innerHTML = '';
     return;
   }
   const scores = state.scores;

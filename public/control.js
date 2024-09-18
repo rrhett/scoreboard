@@ -28,13 +28,14 @@ document.getElementById('start').addEventListener('click', (e) => {
     scores.removeChild(scores.firstElementChild);
   }
   for (let i = 0; i < state.players.length; ++i) {
-    const player = document.createTextNode(state.players[i] + ':');
-    scores.appendChild(player);
+    const field = document.createElement('fieldset');
+    field.appendChild(document.createTextNode(state.players[i] + ': '));
     const score = document.createElement('input');
     score.type = 'text';
     score.id = `score${i}`;
     score.size = 5;
-    scores.appendChild(score);
+    field.appendChild(score);
+    scores.appendChild(field);
   }
   document.getElementById(`score0`).focus();
 });
@@ -43,7 +44,7 @@ document.getElementById('post').addEventListener('click', (e) => {
   state.scores.push(scores);
   for (let i = 0; i < state.players.length; ++i) {
     const player = document.getElementById(`score${i}`);
-    scores.push(parseInt(player.value));
+    scores.push(parseInt(player.value) || 0);
     player.value = '';
   }
   document.getElementById(`score0`).focus();

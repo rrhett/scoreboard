@@ -10,3 +10,7 @@ exports.home = (req, res) => {
 exports.control = (req, res) => {
   res.render('control.hbs');
 };
+
+exports.both = (req, res) => {
+  res.render('both.hbs');
+};

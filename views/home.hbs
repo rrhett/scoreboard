@@ -6,14 +6,15 @@
 html {
   font-size: 24px;
 }
-#round {
+#gameboard {
   text-align: center;
+  margin: auto;
+  width: max-content;
+  padding: 10px;
 }
-#dealer {
-  text-align: center;
-}
-h1 {
-  text-align: center;
+#ss {
+  padding: 10px;
+display: none;
 }
 .went-out {
   color: #0f0;
@@ -47,11 +48,19 @@ td {
 </head>
 <body>
 
+<div id="left"></div>
+<div id="gameboard">
 <h1>Five Crowns</h1>
 
 <div id="round" class="round"></div>
 <div id="dealer" class="dealer"></div>
 <div id="scores"></div>
+
+<div id="ss">
+<button type="button" id="screenshot">Screenshot</button>
+</div>
+</div>
+<div id="right"></div>
 
 </body>
 </html>

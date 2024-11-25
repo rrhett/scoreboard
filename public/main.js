@@ -2,14 +2,33 @@ import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 
 const socket = io();
 
+let wakeLock = null;
+let keepScreenOn = async (on) => {
+  if (on && wakeLock == null) {
+    // create an async function to request a wake lock
+    try {
+      wakeLock = await navigator.wakeLock.request("screen");
+    } catch (err) {
+      // The Wake Lock request has failed - usually system related, such as battery.
+      console.log(`${err.name}, ${err.message}`);
+    }
+  } else {
+    if (wakeLock) {
+      wakeLock.release().then(() => { wakeLock = null });
+    }
+  }
+};
+
 socket.on('state', (state) => {
     console.log(state);
   if (!state.players || state.players.length == 0) {
+    keepScreenOn(false);
     document.getElementById('round').innerHTML = 'Waiting for players...';
     document.getElementById('dealer').innerHTML = '';
     document.getElementById('scores').innerHTML = '';
     return;
   }
+  keepScreenOn(true);
   const scores = state.scores;
   const round = scores.length;
   // Round 1 has 3 cards, etc.
@@ -82,6 +101,7 @@ socket.on('state', (state) => {
   if (winners.length > 0) {
     document.getElementById('dealer').innerHTML =
         `Winner: ${winners.join(', ')}`;
+    keepScreenOn(false);
   }
 
 
@@ -90,4 +110,29 @@ socket.on('state', (state) => {
     scoreDiv.removeChild(scoreDiv.firstElementChild);
   }
   scoreDiv.appendChild(table);
+});
+
+document.getElementById('screenshot').addEventListener('click', async () => {
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+  const video = document.createElement("video");
+  try {
+    const captureStream = await navigator.mediaDevices.getDisplayMedia();
+    video.srcObject = captureStream;
+    // Extract sx, sy and width, height.
+    const gameboard = document.getElementById("gameboard");
+    const sx = gameboard.offsetLeft;
+    const sy = gameboard.offsetTop;
+    const width = gameboard.clientWidth;
+    const height = gameboard.clientHeight;
+console.log(`${sx}, ${sy}, ${width}, ${height}, ${window.width}, ${window.height}`);
+    //context.drawImage(video, sx, sy, width, height, 0, 0, width, height);
+    context.drawImage(video, 0, 0, window.width, window.height);
+    const frame = canvas.toDataURL("image/png");
+    console.log(`Frame: ${frame}`);
+    captureStream.getTracks().forEach(track => track.stop());
+    //window.location.href = frame;
+  } catch (err) {
+    console.error(`Error: ${err}`);
+  }
 });

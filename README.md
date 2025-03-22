@@ -7,3 +7,8 @@ updated from another device (e.g. phone, while playing). Meant for casual usage.
 
 Initial implementation will be for Five Crowns, a fun party game. Hopefully this
 repository expands and can be templated for other games.
+
+## Running
+
+$ screen -DR gameboard
+$ node app.js

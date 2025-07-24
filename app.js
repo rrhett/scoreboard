@@ -17,10 +17,12 @@ import { Server } from 'socket.io';
 */
 
 
+/*
 const credentials = {
     key: fs.readFileSync('key.pem', 'utf-8'),
     cert: fs.readFileSync('cert.pem', 'utf-8')
 };
+*/
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -29,9 +31,9 @@ app.use('/', routes);
 app.use(express.static(path.join(__dirname, '/public')));
 
 const server = createServer(app);
-const httpsServer = https.createServer(credentials, app);
+//const httpsServer = https.createServer(credentials, app);
 const io = new Server(server);
-const httpsIo = new Server(httpsServer);
+//const httpsIo = new Server(httpsServer);
 let lastState = {};
 const onConnection = (socket) => {
   console.log('a user connected');
@@ -40,18 +42,20 @@ const onConnection = (socket) => {
     lastState = state;
     // For now, broadcast to all listening clients.
     io.emit('state', state);
-    httpsIo.emit('state', state);
+    //httpsIo.emit('state', state);
   });
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 };
-httpsIo.on('connection', onConnection);
+//httpsIo.on('connection', onConnection);
 io.on('connection', onConnection);
 server.listen(port, () => {
   console.log(`app is running on port ${port}`);
 });
 const httpsPort = port + 443;
+/*
 httpsServer.listen(httpsPort, () => {
   console.log(`app is running https on port ${httpsPort}`);
 });
+*/

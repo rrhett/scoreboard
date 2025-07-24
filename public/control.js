@@ -1,3 +1,6 @@
+/**
+ * Logic for the controller. Responsible for accepting names of players and taking scores.
+ */
 import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 
 const socket = io();
@@ -7,6 +10,8 @@ const state = {
   players: [],
   // Scores: array of arrays, indexed to round and player name.
   scores: [],
+  // Index of player who won each round (went out first).
+  roundWinner: [],
 };
 // TODO: maybe support adding all at once with commas
 document.getElementById('add').addEventListener('click', (e) => {
@@ -31,6 +36,7 @@ document.getElementById('start').addEventListener('click', (e) => {
     const field = document.createElement('fieldset');
     field.appendChild(document.createTextNode(state.players[i] + ': '));
     const score = document.createElement('input');
+    score.autocomplete = 'off';
     score.type = 'text';
     score.id = `score${i}`;
     score.size = 5;
@@ -41,13 +47,29 @@ document.getElementById('start').addEventListener('click', (e) => {
 });
 document.getElementById('post').addEventListener('click', (e) => {
   const scores = [];
-  state.scores.push(scores);
+  let winner = -1;
   for (let i = 0; i < state.players.length; ++i) {
     const player = document.getElementById(`score${i}`);
+    if (player.value == '') {
+      if (winner >= 0) {
+        // Only let one player be deemed a winner.
+        document.getElementById(`score0`).focus();
+        return;
+      }
+      winner = i;
+    }
     scores.push(parseInt(player.value) || 0);
-    player.value = '';
   }
   document.getElementById(`score0`).focus();
+  // Only submit scores if there is a winner (a blank score):
+  if (winner == -1) {
+    return;
+  }
+  for (let i = 0; i < state.players.length; ++i) {
+    document.getElementById(`score${i}`).value = '';
+  }
+  state.roundWinner.push(winner);
+  state.scores.push(scores);
   post();
 });
 document.getElementById('reset').addEventListener('click', (e) => {

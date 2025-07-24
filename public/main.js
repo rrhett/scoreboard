@@ -1,3 +1,7 @@
+/**
+ * Control logic for main board. Responsible for displaying scores along with
+ * who was in the lead each round, etc.
+ */
 import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 
 const socket = io();
@@ -30,6 +34,7 @@ socket.on('state', (state) => {
   }
   keepScreenOn(true);
   const scores = state.scores;
+  const winner = state.roundWinner;
   const round = scores.length;
   // Round 1 has 3 cards, etc.
   // If we have < 11 rounds, we are still playing.
@@ -67,6 +72,9 @@ socket.on('state', (state) => {
       const scoreCell = document.createElement('td');
       if (0 == score) {
         scoreCell.classList.add("went-out");
+      }
+      if (j == winner[i]) {
+        scoreCell.classList.add("went-out-first");
       }
       if (min == runningTally[j]) {
         scoreCell.classList.add("in-the-lead");

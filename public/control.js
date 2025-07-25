@@ -14,8 +14,12 @@ const state = {
   roundWinner: [],
 };
 // TODO: maybe support adding all at once with commas
-document.getElementById('add').addEventListener('click', (e) => {
+function addPlayer() {
   const player = document.getElementById('player');
+  if (player.value == '') {
+    start();
+    return;
+  }
   state.players.push(player.value);
   document.getElementById('players').innerHTML =
       `Players: ${state.players.join(', ')}`;
@@ -23,8 +27,17 @@ document.getElementById('add').addEventListener('click', (e) => {
   player.focus();
   // Ensure round appears as we're adding players...
   post();
+}
+document.getElementById('add').addEventListener('click', (e) => {
+  addPlayer();
 });
-document.getElementById('start').addEventListener('click', (e) => {
+document.getElementById('player').addEventListener('keydown', (event) => {
+  if (event.key == 'Enter') {
+    event.preventDefault();
+    addPlayer();
+  }
+});
+function start() {
   document.getElementById('setup').style.display = 'none';
   document.getElementById('scores').style.display = 'block';
   // setup the score div
@@ -32,20 +45,46 @@ document.getElementById('start').addEventListener('click', (e) => {
   while (scores.firstElementChild) {
     scores.removeChild(scores.firstElementChild);
   }
+  const inputs = [];
   for (let i = 0; i < state.players.length; ++i) {
-    const field = document.createElement('fieldset');
-    field.appendChild(document.createTextNode(state.players[i] + ': '));
+    //const field = document.createElement('fieldset');
+    //field.appendChild(document.createTextNode(state.players[i] + ': '));
     const score = document.createElement('input');
     score.autocomplete = 'off';
+    score.classList.add("input-field");
+    score.placeholder = state.players[i];
     score.type = 'text';
     score.id = `score${i}`;
     score.size = 5;
-    field.appendChild(score);
-    scores.appendChild(field);
+    scores.appendChild(score);
+    inputs.push(score);
+    //field.appendChild(score);
+    //scores.appendChild(field);
   }
+  // Setup listeners.
+  inputs.forEach((input, index) => {
+    input.addEventListener('keydown', (event) => {
+      if (event.key == 'Tab') {
+        event.preventDefault();
+        let nextIndex;
+        if (event.shiftKey) {
+          nextIndex = (index - 1 + inputs.length) % inputs.length;
+        } else {
+          nextIndex = (index + 1) % inputs.length;
+        }
+        inputs[nextIndex].focus();
+      } else if (event.key == 'Enter') {
+        event.preventDefault();
+        postScores();
+      }
+    });
+  });
   document.getElementById(`score0`).focus();
+}
+document.getElementById('start').addEventListener('click', (e) => {
+  start();
 });
-document.getElementById('post').addEventListener('click', (e) => {
+function postScores() {
   const scores = [];
   let winner = -1;
   for (let i = 0; i < state.players.length; ++i) {
@@ -71,6 +110,9 @@ document.getElementById('post').addEventListener('click', (e) => {
   state.roundWinner.push(winner);
   state.scores.push(scores);
   post();
+}
+document.getElementById('post').addEventListener('click', (e) => {
+  postScores();
 });
 document.getElementById('reset').addEventListener('click', (e) => {
   document.getElementById('setup').style.display = 'block';

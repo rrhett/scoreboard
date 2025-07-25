@@ -1,7 +1,11 @@
 <html>
 <head>
 <script src="control.js" type="module" defer></script>
-<style>
+<script src="https://cdn.tailwindcss.com"></script>
+<style type="text/tailwindcss">
+body {
+  font-family: "Inter", sans-serif;
+}
 html {
   font-size: xx-large;
 }
@@ -11,33 +15,57 @@ fieldset {
   font-size: xx-large;
 }
 button {
-  padding: 10px;
-  font-size: x-large;
+  @apply bg-transparent hover:bg-blue-500 text-blue-700 font-semibold
+    hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent
+    rounded;
 }
 input {
   font-size: x-large;
+}
+.inputscores {
+  background-color: #ffffff;
+  padding: .5rem;
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+.input-field {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 0.5rem; /* rounded-lg */
+  width: 100%;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.input-field:focus {
+  outline: none;
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* ring-blue-500/50 */
 }
 </style>
 <title>Control</title>
 </head>
 <body>
 
-<div id="setup">
-  <div id="players">Players:</div>
+<div id="setup" style="padding: 30px">
+  <div id="players">Player:</div>
   <div>
-    <input type="text" id="player" name="player" size="20"/>
+    <input type="text" class="input-field" id="player" name="player" size="15"/>
     <button type="button" id="add">Add Player</button>
   </div>
 
-  <div>
+  <div style="padding: 30px">
   <button type="button" id="start">Start Game</button>
   </div>
 </div>
 
 <div id="scores" style="display: none">
-  <div id="inputscores"></div>
-  <div>
-    <button type="button" id="post">Post Round</button>
+  <div id="inputscores" class="inputscores"></div>
+  <div style="padding: 30px">
+    <button type="button" id="post">Post&nbsp;Round</button>
   </div>
 </div>
 

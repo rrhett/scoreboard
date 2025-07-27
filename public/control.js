@@ -121,6 +121,7 @@ document.getElementById('reset').addEventListener('click', (e) => {
   document.getElementById('player').focus();
   state.players = [];
   state.scores = [];
+  state.roundWinner = [];
   post();
 });
 document.getElementById('player').focus();

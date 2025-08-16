@@ -12,7 +12,10 @@ const state = {
   scores: [],
   // Index of player who won each round (went out first).
   roundWinner: [],
+  started: false,
 };
+let initialized = false;
+
 // TODO: maybe support adding all at once with commas
 function addPlayer() {
   const player = document.getElementById('player');
@@ -38,6 +41,8 @@ document.getElementById('player').addEventListener('keydown', (event) => {
   }
 });
 function start() {
+  state.started = true;
+  post();
   document.getElementById('setup').style.display = 'none';
   document.getElementById('scores').style.display = 'block';
   // setup the score div
@@ -122,16 +127,34 @@ document.getElementById('reset').addEventListener('click', (e) => {
   state.players = [];
   state.scores = [];
   state.roundWinner = [];
+  state.started = false;
   post();
 });
 document.getElementById('player').focus();
 
 function post() {
+  initialized = true;
   socket.emit('state', state);
 }
 
 socket.on('connect', (socket) => {
   // If we lost connectivity and come back, go ahead and post whatever we
   // currently have.
-  post();
+  if (initialized) {
+    post();
+  }
+});
+
+socket.on('state', (remoteState) => {
+    if (!initialized) {
+    console.log(`Got ${JSON.stringify(state)}, initializing`);
+      initialized = true;
+      state.players = remoteState.players;
+      state.scores = remoteState.scores;
+      state.roundWinner = remoteState.roundWinner;
+      state.started = remoteState.started;
+      if (state.started) {
+        start();
+      }
+    }
 });

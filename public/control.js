@@ -58,7 +58,7 @@ function start() {
     score.autocomplete = 'off';
     score.classList.add("input-field");
     score.placeholder = state.players[i];
-    score.type = 'text';
+    score.type = 'number';
     score.id = `score${i}`;
     score.size = 5;
     scores.appendChild(score);

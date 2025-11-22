@@ -147,12 +147,12 @@ socket.on('connect', (socket) => {
 
 socket.on('state', (remoteState) => {
     if (!initialized) {
-    console.log(`Got ${JSON.stringify(state)}, initializing`);
+      console.log(`Got ${JSON.stringify(state)}, initializing`);
       initialized = true;
-      state.players = remoteState.players;
-      state.scores = remoteState.scores;
-      state.roundWinner = remoteState.roundWinner;
-      state.started = remoteState.started;
+      state.players = remoteState.players || [];
+      state.scores = remoteState.scores || [];
+      state.roundWinner = remoteState.roundWinner || [];
+      state.started = remoteState.started || false;
       if (state.started) {
         start();
       }

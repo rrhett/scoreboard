@@ -1,10 +1,12 @@
 <html>
+
 <head>
-<script src="control.js" type="module" defer></script>
-<script src="https://cdn.tailwindcss.com"></script>
-<style type="text/tailwindcss">
-body {
+  <script src="control.js" type="module" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style type="text/tailwindcss">
+    body {
   font-family: "Inter", sans-serif;
+  background-color: white;
 }
 html {
   font-size: xx-large;
@@ -46,32 +48,50 @@ input {
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25); /* ring-blue-500/50 */
 }
 </style>
-<title>Control</title>
+  <title>Control</title>
 </head>
+
 <body>
 
-<div id="setup" style="padding: 30px">
-  <div id="players">Player:</div>
-  <div>
-    <input type="text" class="input-field" id="player" name="player" size="15"/>
-    <button type="button" id="add">Add Player</button>
+  <div id="setup" style="padding: 30px">
+    <div id="players">Player:</div>
+    <div>
+      <input type="text" class="input-field" id="player" name="player" size="15" />
+      <button type="button" id="add">Add Player</button>
+    </div>
+
+    <div style="padding: 30px">
+      <button type="button" id="start">Start Game</button>
+    </div>
+  </div>
+
+  <div id="scores" style="display: none">
+    <div id="inputscores" class="inputscores"></div>
+    <div style="padding: 30px">
+      <button type="button" id="post">Post&nbsp;Round</button>
+    </div>
   </div>
 
   <div style="padding: 30px">
-  <button type="button" id="start">Start Game</button>
+    <button type="button" id="reset">Reset</button>
   </div>
-</div>
 
-<div id="scores" style="display: none">
-  <div id="inputscores" class="inputscores"></div>
   <div style="padding: 30px">
-    <button type="button" id="post">Post&nbsp;Round</button>
+    <button type="button" id="fullscreen" title="Toggle Full Screen">
+      <!-- Enter Full Screen Icon -->
+      <svg id="icon-enter" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        style="display: inline-block;">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+      </svg>
+      <!-- Exit Full Screen Icon -->
+      <svg id="icon-exit" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+        <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"></path>
+      </svg>
+    </button>
   </div>
-</div>
-
-<div style="padding: 30px">
-<button type="button" id="reset">Reset</button>
-</div>
 
 </body>
+
 </html>

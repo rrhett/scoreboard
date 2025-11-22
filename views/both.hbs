@@ -1,39 +1,45 @@
 <html>
+
 <head>
-<title>Board Game</title>
-<style>
-body {
-  display: flex;
-  height: 100vh;
-  margin: 0;
-}
-.control {
-  width: auto;
-  flex-grow: 0;
-  flex-shrink: 1;
-  flex-basis: auto;
-  height: 100%;
-  box-sizing: border-box;
-  /*
+  <title>Board Game</title>
+  <style>
+    body {
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      background-color: white;
+    }
+
+    .control {
+      width: auto;
+      flex-grow: 0;
+      flex-shrink: 1;
+      flex-basis: auto;
+      height: 100%;
+      box-sizing: border-box;
+      /*
   width:310;
   height: 100%;
   box-sizing: border-box;
   border: 0;
   */
-}
-.board {
-  flex-grow: 1;
-  height: 100%;
-  width: auto;
-  box-sizing: border-box;
-  padding: 0;
-  border: 0;
-}
-</style>
+    }
+
+    .board {
+      flex-grow: 1;
+      height: 100%;
+      width: auto;
+      box-sizing: border-box;
+      padding: 0;
+      border: 0;
+    }
+  </style>
 </head>
 </head>
+
 <body>
-<iframe src="/control" class="control"></iframe>
-<iframe src="/" class="board"></iframe>
+  <iframe src="/control" class="control" allow="fullscreen"></iframe>
+  <iframe src="/" class="board" allow="fullscreen"></iframe>
 </body>
+
 </html>

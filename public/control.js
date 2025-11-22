@@ -25,7 +25,7 @@ function addPlayer() {
   }
   state.players.push(player.value);
   document.getElementById('players').innerHTML =
-      `Players: ${state.players.join(', ')}`;
+    `Players: ${state.players.join(', ')}`;
   player.value = '';
   player.focus();
   // Ensure round appears as we're adding players...
@@ -132,6 +132,43 @@ document.getElementById('reset').addEventListener('click', (e) => {
 });
 document.getElementById('player').focus();
 
+const fullscreenBtn = document.getElementById('fullscreen');
+const iconEnter = document.getElementById('icon-enter');
+const iconExit = document.getElementById('icon-exit');
+
+function updateFullscreenButton() {
+  // Check fullscreen on the top-level document
+  const doc = window.parent ? window.parent.document : document;
+  if (doc.fullscreenElement) {
+    iconEnter.style.display = 'none';
+    iconExit.style.display = 'inline-block';
+    fullscreenBtn.title = "Exit Full Screen";
+  } else {
+    iconEnter.style.display = 'inline-block';
+    iconExit.style.display = 'none';
+    fullscreenBtn.title = "Enter Full Screen";
+  }
+}
+
+fullscreenBtn.addEventListener('click', () => {
+  const doc = window.parent ? window.parent.document : document;
+  const docEl = doc.documentElement;
+
+  if (!doc.fullscreenElement) {
+    docEl.requestFullscreen().catch((err) => {
+      console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+    });
+  } else {
+    doc.exitFullscreen();
+  }
+});
+
+// Listen for changes on both the iframe document and the parent document
+document.addEventListener('fullscreenchange', updateFullscreenButton);
+if (window.parent) {
+  window.parent.document.addEventListener('fullscreenchange', updateFullscreenButton);
+}
+
 function post() {
   initialized = true;
   socket.emit('state', state);
@@ -146,15 +183,15 @@ socket.on('connect', (socket) => {
 });
 
 socket.on('state', (remoteState) => {
-    if (!initialized) {
-      console.log(`Got ${JSON.stringify(state)}, initializing`);
-      initialized = true;
-      state.players = remoteState.players || [];
-      state.scores = remoteState.scores || [];
-      state.roundWinner = remoteState.roundWinner || [];
-      state.started = remoteState.started || false;
-      if (state.started) {
-        start();
-      }
+  if (!initialized) {
+    console.log(`Got ${JSON.stringify(state)}, initializing`);
+    initialized = true;
+    state.players = remoteState.players || [];
+    state.scores = remoteState.scores || [];
+    state.roundWinner = remoteState.roundWinner || [];
+    state.started = remoteState.started || false;
+    if (state.started) {
+      start();
     }
+  }
 });

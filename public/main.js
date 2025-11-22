@@ -7,21 +7,75 @@ import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 const socket = io();
 
 let wakeLock = null;
-let keepScreenOn = async (on) => {
-  if (on && wakeLock == null) {
-    // create an async function to request a wake lock
-    try {
-      wakeLock = await navigator.wakeLock.request("screen");
-    } catch (err) {
-      // The Wake Lock request has failed - usually system related, such as battery.
-      console.log(`${err.name}, ${err.message}`);
-    }
-  } else {
-    if (wakeLock) {
-      wakeLock.release().then(() => { wakeLock = null });
+const updateWakelockStatus = (active) => {
+  const icon = document.getElementById('wakelock-status');
+  if (icon) {
+    if (active) {
+      icon.classList.add('active');
+      icon.classList.remove('inactive');
+    } else {
+      icon.classList.add('inactive');
+      icon.classList.remove('active');
     }
   }
 };
+
+let keepScreenOn = async (on) => {
+  if (on && document.visibilityState === 'visible') {
+    if (wakeLock == null) {
+      try {
+        wakeLock = await navigator.wakeLock.request("screen");
+        updateWakelockStatus(true);
+        wakeLock.addEventListener('release', () => {
+          wakeLock = null;
+          updateWakelockStatus(false);
+        });
+      } catch (err) {
+        console.log(`${err.name}, ${err.message}`);
+        updateWakelockStatus(false);
+      }
+    }
+  } else {
+    if (wakeLock) {
+      await wakeLock.release();
+      wakeLock = null;
+      updateWakelockStatus(false);
+    }
+  }
+};
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    // Re-acquire lock if we should be keeping screen on (game active logic handled by caller or state)
+    // For now, we rely on the fact that keepScreenOn is called with 'true' when game is active.
+    // However, we need to know if the game IS active to re-acquire.
+    // A simple way is to check if we *wanted* it on.
+    // But keepScreenOn is stateless about "intent" other than the call itself.
+    // Let's check if the game is in a state where it should be on.
+    // We can check if the "scores" div has content, which implies a game is running based on existing logic.
+    // Or better, we can just call keepScreenOn(true) if we think we should, but we don't have the state here easily.
+    // Actually, the existing logic calls keepScreenOn(true) on every state update.
+    // But if we switch tabs, we release. When we come back, we need to re-acquire.
+    // We can store the desired state in a variable.
+  } else {
+    keepScreenOn(false);
+  }
+});
+
+let shouldKeepScreenOn = false;
+const originalKeepScreenOn = keepScreenOn;
+keepScreenOn = async (on) => {
+  shouldKeepScreenOn = on;
+  await originalKeepScreenOn(on);
+};
+
+document.addEventListener('visibilitychange', async () => {
+  if (document.visibilityState === 'visible' && shouldKeepScreenOn) {
+    await originalKeepScreenOn(true);
+  } else if (document.visibilityState !== 'visible') {
+    await originalKeepScreenOn(false);
+  }
+});
 
 socket.on('state', (state) => {
     console.log(state);

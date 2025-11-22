@@ -13,6 +13,7 @@ const state = {
   // Index of player who won each round (went out first).
   roundWinner: [],
   started: false,
+  startTime: null,
 };
 let initialized = false;
 
@@ -42,6 +43,9 @@ document.getElementById('player').addEventListener('keydown', (event) => {
 });
 function start() {
   state.started = true;
+  if (!state.startTime) {
+    state.startTime = new Date().toISOString();
+  }
   post();
   document.getElementById('setup').style.display = 'none';
   document.getElementById('scores').style.display = 'block';
@@ -128,6 +132,7 @@ document.getElementById('reset').addEventListener('click', (e) => {
   state.scores = [];
   state.roundWinner = [];
   state.started = false;
+  state.startTime = null;
   post();
 });
 document.getElementById('player').focus();
@@ -190,6 +195,7 @@ socket.on('state', (remoteState) => {
     state.scores = remoteState.scores || [];
     state.roundWinner = remoteState.roundWinner || [];
     state.started = remoteState.started || false;
+    state.startTime = remoteState.startTime || null;
     if (state.started) {
       start();
     }

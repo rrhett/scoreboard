@@ -85,6 +85,30 @@ function start() {
       } else if (event.key == 'Enter') {
         event.preventDefault();
         postScores();
+      } else if (event.key == 'ArrowUp') {
+        if (input.value === '') {
+          event.preventDefault();
+          input.value = '3';
+        }
+      } else if (event.key == 'ArrowDown') {
+        if (input.value === '3') {
+          event.preventDefault();
+          input.value = '';
+        } else if (input.value === '') {
+          event.preventDefault();
+        }
+      }
+    });
+    input.addEventListener('input', (event) => {
+      if (event.inputType && (event.inputType.startsWith('insertText') || event.inputType.startsWith('deleteContent'))) {
+        return;
+      }
+      if (input.value === '1') {
+        input.value = '3';
+      } else if (input.value === '2') {
+        input.value = '';
+      } else if (input.value === '-1') {
+        input.value = '';
       }
     });
   });

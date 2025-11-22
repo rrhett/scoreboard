@@ -53,36 +53,40 @@ input {
 
 <body>
 
-  <div id="setup" style="padding: 30px">
-    <div id="players">Player:</div>
-    <div>
-      <input type="text" class="input-field" id="player" name="player" size="15" />
-      <button type="button" id="add">Add Player</button>
+  <div id="setup" class="space-y-6 p-8">
+    <div class="w-full max-w-xs space-y-4 mx-auto">
+      <div id="players" class="text-lg font-semibold text-center min-h-[1.5em]">Players:</div>
+      <div class="space-y-2">
+        <label for="player" class="block text-gray-700 text-sm font-bold">Player Name:</label>
+        <input type="text" class="input-field w-full" id="player" name="player" placeholder="Enter name" />
+        <button type="button" id="add" class="w-full py-2">Add</button>
+      </div>
     </div>
 
-    <div style="padding: 30px">
-      <button type="button" id="start">Start Game</button>
-    </div>
-  </div>
-
-  <div id="scores" style="display: none">
-    <div id="inputscores" class="inputscores"></div>
-    <div style="padding: 30px">
-      <button type="button" id="post">Post&nbsp;Round</button>
+    <div class="w-full max-w-xs mx-auto">
+      <button type="button" id="start" class="w-full py-3 text-xl whitespace-nowrap">Start</button>
     </div>
   </div>
 
-  <div style="padding: 30px">
-    <button type="button" id="reset">Reset</button>
+  <div id="scores" style="display: none" class="space-y-6 p-8">
+    <div id="inputscores" class="inputscores w-full max-w-xs mx-auto"></div>
+    <div class="w-full max-w-xs mx-auto">
+      <button type="button" id="post" class="w-full py-3 text-xl">Post Round</button>
+    </div>
   </div>
 
-  <div style="padding: 30px">
-    <button type="button" id="fullscreen" title="Toggle Full Screen">
+  <div class="fixed bottom-4 left-4">
+    <button type="button" id="reset" class="text-sm py-1 px-3">Reset</button>
+  </div>
+
+  <div class="fixed bottom-4 right-4">
+    <button type="button" id="fullscreen" title="Toggle Full Screen"
+      class="p-2 rounded-full hover:bg-gray-100 border-0">
       <!-- Enter Full Screen Icon -->
       <svg id="icon-enter" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
         style="display: inline-block;">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2-2h3"></path>
       </svg>
       <!-- Exit Full Screen Icon -->
       <svg id="icon-exit" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"

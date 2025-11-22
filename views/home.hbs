@@ -88,8 +88,15 @@
       /* Moon color */
     }
 
+    #wakelock-status.error {
+      opacity: 1;
+      color: #F44336;
+      /* Red color */
+    }
+
     .icon-sun,
-    .icon-moon {
+    .icon-moon,
+    .icon-error {
       display: none;
     }
 
@@ -98,6 +105,10 @@
     }
 
     #wakelock-status.inactive .icon-moon {
+      display: block;
+    }
+
+    #wakelock-status.error .icon-error {
       display: block;
     }
 
@@ -140,6 +151,10 @@
       <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor">
         <path
           d="M10 2c-1.82 0-3.53.5-5 1.35C7.99 5.08 10 8.3 10 12s-2.01 6.92-5 8.65C6.47 21.5 8.18 22 10 22c5.52 0 10-4.48 10-10S15.52 2 10 2z" />
+      </svg>
+      <!-- Error Icon -->
+      <svg class="icon-error" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
       </svg>
     </div>
   </div>

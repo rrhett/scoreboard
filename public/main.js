@@ -7,15 +7,19 @@ import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 const socket = io();
 
 let wakeLock = null;
-const updateWakelockStatus = (active) => {
+const updateWakelockStatus = (status, message) => {
   const icon = document.getElementById('wakelock-status');
   if (icon) {
-    if (active) {
+    icon.classList.remove('active', 'inactive', 'error');
+    if (status === 'active') {
       icon.classList.add('active');
-      icon.classList.remove('inactive');
+      icon.title = "Wakelock Active: Screen will stay on";
+    } else if (status === 'error') {
+      icon.classList.add('error');
+      icon.title = message || "Wakelock Error";
     } else {
       icon.classList.add('inactive');
-      icon.classList.remove('active');
+      icon.title = "Wakelock Inactive";
     }
   }
 };
@@ -23,24 +27,28 @@ const updateWakelockStatus = (active) => {
 let keepScreenOn = async (on) => {
   if (on && document.visibilityState === 'visible') {
     if (wakeLock == null) {
+      if (!window.isSecureContext) {
+        updateWakelockStatus('error', 'Wakelock requires HTTPS (Secure Context)');
+        return;
+      }
       try {
         wakeLock = await navigator.wakeLock.request("screen");
-        updateWakelockStatus(true);
+        updateWakelockStatus('active');
         wakeLock.addEventListener('release', () => {
           wakeLock = null;
-          updateWakelockStatus(false);
+          updateWakelockStatus('inactive');
         });
       } catch (err) {
         console.log(`${err.name}, ${err.message}`);
-        updateWakelockStatus(false);
+        updateWakelockStatus('error', `${err.name}: ${err.message}`);
       }
     }
   } else {
     if (wakeLock) {
       await wakeLock.release();
       wakeLock = null;
-      updateWakelockStatus(false);
     }
+    updateWakelockStatus('inactive');
   }
 };
 
@@ -78,7 +86,7 @@ document.addEventListener('visibilitychange', async () => {
 });
 
 socket.on('state', (state) => {
-    console.log(state);
+  console.log(state);
   if (!state.players || state.players.length == 0) {
     keepScreenOn(false);
     document.getElementById('round').innerHTML = 'Waiting for players...';
@@ -94,12 +102,12 @@ socket.on('state', (state) => {
   // If we have < 11 rounds, we are still playing.
   if (scores.length < 11) {
     document.getElementById('round').innerHTML =
-        `Round ${round + 1}: ${round + 3} cards`;
+      `Round ${round + 1}: ${round + 3} cards`;
     document.getElementById('dealer').innerHTML =
-        `Dealer: ${state.players[round % state.players.length]}`;
+      `Dealer: ${state.players[round % state.players.length]}`;
   } else {
     document.getElementById('round').innerHTML =
-        `Game Has Ended`;
+      `Game Has Ended`;
   }
 
   // Render the scores.
@@ -162,7 +170,7 @@ socket.on('state', (state) => {
   table.appendChild(totalRow);
   if (winners.length > 0) {
     document.getElementById('dealer').innerHTML =
-        `Winner: ${winners.join(', ')}`;
+      `Winner: ${winners.join(', ')}`;
     keepScreenOn(false);
   }
 
@@ -187,7 +195,7 @@ document.getElementById('screenshot').addEventListener('click', async () => {
     const sy = gameboard.offsetTop;
     const width = gameboard.clientWidth;
     const height = gameboard.clientHeight;
-console.log(`${sx}, ${sy}, ${width}, ${height}, ${window.width}, ${window.height}`);
+    console.log(`${sx}, ${sy}, ${width}, ${height}, ${window.width}, ${window.height}`);
     //context.drawImage(video, sx, sy, width, height, 0, 0, width, height);
     context.drawImage(video, 0, 0, window.width, window.height);
     const frame = canvas.toDataURL("image/png");

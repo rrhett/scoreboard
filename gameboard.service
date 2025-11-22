@@ -1,0 +1,14 @@
+[Unit]
+Description=Gameboard Service
+After=network.target
+
+[Service]
+Environment=NODE_VERSION=22
+WorkingDirectory=/home/user/gameboard
+ExecStart=/home/user/.nvm/nvm-exec node app.js
+Type=simple
+Restart=always
+User=user
+
+[Install]
+WantedBy=default.target

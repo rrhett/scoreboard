@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('gameboard.db');
+const db = new sqlite3.Database('/var/lib/scoreboard/scoreboard.db');
 
 exports.getScoresPage = (req, res) => {
     res.render('scores.hbs');

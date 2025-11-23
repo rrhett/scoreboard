@@ -1,0 +1,10 @@
+services:
+  scoreboard:
+    image: scoreboard
+    ports:
+      - 5000:5000
+    volumes:
+      - scoreboard-data:/var/lib/scoreboard
+
+volumes:
+  scoreboard-data:

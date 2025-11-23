@@ -94,12 +94,17 @@
         div.className = 'game-row';
         div.innerHTML = `
           <div class="game-summary">
-            <div>
+            <div class="flex-grow truncate mr-4">
               <span class="font-semibold">${date}</span>
               <span class="mx-2 text-gray-400">|</span>
-              <span>Winner: <span class="winner">${winnerName}</span></span>
+              <span class="font-semibold mr-1">Players:</span>
+              <span>
+                ${game.players.map((p, i) =>
+          `<span class="${i === game.winner ? 'winner' : ''}">${p}</span>`
+        ).join(', ')}
+              </span>
             </div>
-            <div class="flex items-center">
+            <div class="flex items-center flex-shrink-0 whitespace-nowrap">
                 <span class="text-gray-500 text-sm mr-2">Click to expand</span>
                 <button class="btn-replay text-blue-500 hover:text-blue-700 mr-2" title="Replay Game" onclick="event.stopPropagation(); replayGame(${game.id})">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

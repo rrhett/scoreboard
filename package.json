@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon app",
+    "dev": "docker run -it --rm -p 5000:5000 -w /app -v \"$(pwd):/app\" -e DB_PATH=scoreboard.db scoreboard sh -c \"yarn install && yarn node app.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

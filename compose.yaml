@@ -1,6 +1,6 @@
 services:
   scoreboard:
-    image: scoreboard
+    image: rrhett/scoreboard
     ports:
       - 5000:5000
     volumes:

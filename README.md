@@ -10,10 +10,19 @@ repository expands and can be templated for other games.
 
 ## Running
 
-This is appropriate for development.
+For development:
 
-$ screen -DR gameboard
-$ node app.js
+$ docker build -t scoreboard .
+$ yarn run dev
+
+First, this builds a local docker image out of the source directory.
+
+Then this starts a docker container, installs all the dependencies within the
+docker container, and runs the app in the docker container, but will bind mount
+the current directory so changes are reflected live.
+
+TODO: see if I can simplify the script to use node:lts-alpine or similar. Right
+now scoreboard is required to install the latest yarn properly.
 
 ## Testing
 
@@ -24,16 +33,30 @@ wakelock.
 
 ## Deploying
 
-To deploy on a server, it should be configured via systemd so that it starts
-automatically.
+There are two options:
 
-First, update gameboard.service with the proper username, if applicable, then:
+### Build and deploy a local image
+
+Deploy via docker:
 
 ```
-sudo cp gameboard.service /etc/systemd/system/gameboard.service
-sudo systemctl daemon-reload
-sudo systemctl enable gameboard.service
-sudo systemctl start gameboard.service
+$ git pull ...
+$ docker build -t rrhett/scoreboard .
+$ docker compose up -d
 ```
 
-TODO: document a strategy for rolling out an update via staging repo directory.
+### Build and deploy a public image
+
+Build the full image:
+
+```
+$ docker build -t rrhett/scoreboard .
+$ docker push rrhett/scoreboard
+```
+
+On the prod machine, update:
+
+```
+$ docker compose pull
+$ docker compose up -d
+```

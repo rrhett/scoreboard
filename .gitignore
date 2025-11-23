@@ -8,7 +8,7 @@ node_modules/
 dist/
 
 # Ignore the games database
-gameboard.db
+scoreboard.db
 
 # Compiled Java class files
 *.class

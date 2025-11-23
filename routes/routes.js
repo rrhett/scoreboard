@@ -11,5 +11,6 @@ router.post('/api/state', appController.updateState);
 router.get('/scores', historyController.getScoresPage);
 router.get('/api/games', historyController.getGamesApi);
 router.delete('/api/games/:id', historyController.deleteGameApi);
+router.post('/api/replay', historyController.replayGame);
 
 module.exports = router;

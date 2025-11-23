@@ -212,16 +212,28 @@ socket.on('connect', (socket) => {
 });
 
 socket.on('state', (remoteState) => {
-  if (!initialized) {
-    console.log(`Got ${JSON.stringify(state)}, initializing`);
+  const remoteStartTime = remoteState.startTime || null;
+  const localStartTime = state.startTime || null;
+
+  console.log(`Got state`);
+  console.log(remoteState);
+
+  // Initialize if not already, OR if the game start time has changed (implies new game or reset)
+  if (!initialized || remoteStartTime !== null && remoteStartTime !== localStartTime) {
+    console.log(`Got state update. Initialized: ${initialized}, Time change: ${localStartTime} -> ${remoteStartTime}`);
     initialized = true;
     state.players = remoteState.players || [];
     state.scores = remoteState.scores || [];
     state.roundWinner = remoteState.roundWinner || [];
     state.started = remoteState.started || false;
-    state.startTime = remoteState.startTime || null;
+    state.startTime = remoteStartTime;
+
     if (state.started) {
       start();
     }
+  }
+  if (remoteStartTime == null && state.started) {
+    console.log('Detected server restart, sending state')
+    post();
   }
 });

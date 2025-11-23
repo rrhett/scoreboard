@@ -57,3 +57,42 @@ exports.deleteGameApi = (req, res) => {
         res.json({ message: "Game deleted", changes: this.changes });
     });
 };
+
+exports.replayGame = (req, res) => {
+    const id = req.body.id;
+    if (!id) {
+        return res.status(400).json({ error: "Game ID is required" });
+    }
+
+    db.get("SELECT * FROM games WHERE id = ?", id, (err, row) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+        if (!row) {
+            return res.status(404).json({ error: "Game not found" });
+        }
+
+        let players;
+        try {
+            players = JSON.parse(row.players);
+        } catch (e) {
+            return res.status(500).json({ error: "Failed to parse players" });
+        }
+
+        const newState = {
+            players: players,
+            scores: [],
+            roundWinner: [],
+            started: true,
+            startTime: new Date().toISOString()
+        };
+
+        const updateGameState = req.app.get('gameStateUpdater');
+        if (updateGameState) {
+            updateGameState(newState);
+            res.json({ message: "Game restarted" });
+        } else {
+            res.status(500).json({ error: "Game state updater not available" });
+        }
+    });
+};

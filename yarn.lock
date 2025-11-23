@@ -895,19 +895,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scoreboard@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "scoreboard@workspace:."
-  dependencies:
-    express: "npm:^4.21.0"
-    hbs: "npm:^4.2.0"
-    http: "npm:^0.0.1-security"
-    nodemon: "npm:^3.1.4"
-    socket.io: "npm:^4.7.5"
-    sqlite3: "npm:^5.1.7"
-  languageName: unknown
-  linkType: soft
-
 "gauge@npm:^4.0.3":
   version: 4.0.4
   resolution: "gauge@npm:4.0.4"
@@ -2007,6 +1994,19 @@ __metadata:
   checksum: 10c0/7e3c8b2e88a1841c9671094bbaeebd94448111dd90a81a1f606f3f67708a6ec57763b3b47f06da09fc6054193e0e6709e77325415dc8422b04497a8070fa02d4
   languageName: node
   linkType: hard
+
+"scoreboard@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "scoreboard@workspace:."
+  dependencies:
+    express: "npm:^4.21.0"
+    hbs: "npm:^4.2.0"
+    http: "npm:^0.0.1-security"
+    nodemon: "npm:^3.1.4"
+    socket.io: "npm:^4.7.5"
+    sqlite3: "npm:^5.1.7"
+  languageName: unknown
+  linkType: soft
 
 "semver@npm:^7.3.5, semver@npm:^7.5.3":
   version: 7.7.3

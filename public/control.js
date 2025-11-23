@@ -143,13 +143,55 @@ function postScores() {
   state.roundWinner.push(winner);
   state.scores.push(scores);
   post();
+  checkGameOver(state);
 }
+
+function checkGameOver(state) {
+  if (state.scores.length >= 11) {
+    document.getElementById('scores').style.display = 'none';
+    document.getElementById('game-over').style.display = 'block';
+
+    // Calculate winner
+    const totals = new Array(state.players.length).fill(0);
+    state.scores.forEach(roundScores => {
+      roundScores.forEach((score, i) => totals[i] += score);
+    });
+
+    let minScore = Infinity;
+    let winnerIndex = -1;
+    totals.forEach((total, i) => {
+      if (total < minScore) {
+        minScore = total;
+        winnerIndex = i;
+      }
+    });
+
+    const winnerName = state.players[winnerIndex];
+    document.getElementById('winner-display').textContent = `Winner: ${winnerName} (${minScore} points)`;
+  } else {
+    document.getElementById('game-over').style.display = 'none';
+    if (state.started) {
+      document.getElementById('scores').style.display = 'block';
+    }
+  }
+}
+
+document.getElementById('replay').addEventListener('click', () => {
+  state.scores = [];
+  state.roundWinner = [];
+  state.startTime = new Date().toISOString();
+  // Keep players the same
+
+  document.getElementById('game-over').style.display = 'none';
+  start(); // Re-initialize inputs
+});
 document.getElementById('post').addEventListener('click', (e) => {
   postScores();
 });
 document.getElementById('reset').addEventListener('click', (e) => {
   document.getElementById('setup').style.display = 'block';
   document.getElementById('scores').style.display = 'none';
+  document.getElementById('game-over').style.display = 'none';
   document.getElementById('players').innerHTML = 'Players:';
   document.getElementById('player').focus();
   state.players = [];
@@ -230,6 +272,7 @@ socket.on('state', (remoteState) => {
 
     if (state.started) {
       start();
+      checkGameOver(state);
     }
   }
   if (remoteStartTime == null && state.started) {

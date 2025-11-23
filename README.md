@@ -12,17 +12,12 @@ repository expands and can be templated for other games.
 
 For development:
 
-$ docker build -t scoreboard .
 $ yarn run dev
 
-First, this builds a local docker image out of the source directory.
-
-Then this starts a docker container, installs all the dependencies within the
-docker container, and runs the app in the docker container, but will bind mount
-the current directory so changes are reflected live.
-
-TODO: see if I can simplify the script to use node:lts-alpine or similar. Right
-now scoreboard is required to install the latest yarn properly.
+This starts a docker node container with yarn modern, installs all the
+dependencies within the docker container, and runs the app in the docker
+container, but will bind mount the current directory so changes are reflected
+live.
 
 ## Testing
 

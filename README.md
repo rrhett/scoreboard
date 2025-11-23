@@ -35,7 +35,9 @@ There are two options:
 Deploy via docker:
 
 ```
-$ git pull ...
+$ git clone https://rrhett@bitbucket.org/rrhett/scoreboard.git
+or
+$ git pull
 $ docker build -t rrhett/scoreboard .
 $ docker compose up -d
 ```

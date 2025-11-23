@@ -895,9 +895,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gameboard@workspace:.":
+"scoreboard@workspace:.":
   version: 0.0.0-use.local
-  resolution: "gameboard@workspace:."
+  resolution: "scoreboard@workspace:."
   dependencies:
     express: "npm:^4.21.0"
     hbs: "npm:^4.2.0"

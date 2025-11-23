@@ -1,7 +1,7 @@
 {
-  "name": "gameboard",
+  "name": "scoreboard",
   "version": "1.0.0",
-  "description": "Game board to display public info (score, etc) during a game",
+  "description": "Score board to display public info (score, etc) during a game",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app",
@@ -10,11 +10,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/rrhett/gameboard.git"
+    "url": "git+ssh://git@bitbucket.org/rrhett/scoreboard.git"
   },
   "author": "Rhett Robinson",
   "license": "GPL-3.0-or-later",
-  "homepage": "https://bitbucket.org/rrhett/gameboard#readme",
+  "homepage": "https://bitbucket.org/rrhett/scoreboard#readme",
   "dependencies": {
     "express": "^4.21.0",
     "hbs": "^4.2.0",

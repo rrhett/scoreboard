@@ -1,6 +1,6 @@
-# Gameboard
+# Scoreboard
 
-Server that shows a gameboard (e.g. on a monitor) that can be controlled and
+Server that shows a scoreboard (e.g. on a monitor) that can be controlled and
 updated from another device (e.g. phone, while playing). Meant for casual usage.
 
 ## Games

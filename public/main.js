@@ -190,11 +190,11 @@ document.getElementById('screenshot').addEventListener('click', async () => {
     const captureStream = await navigator.mediaDevices.getDisplayMedia();
     video.srcObject = captureStream;
     // Extract sx, sy and width, height.
-    const gameboard = document.getElementById("gameboard");
-    const sx = gameboard.offsetLeft;
-    const sy = gameboard.offsetTop;
-    const width = gameboard.clientWidth;
-    const height = gameboard.clientHeight;
+    const scoreboard = document.getElementById("scoreboard");
+    const sx = scoreboard.offsetLeft;
+    const sy = scoreboard.offsetTop;
+    const width = scoreboard.clientWidth;
+    const height = scoreboard.clientHeight;
     console.log(`${sx}, ${sy}, ${width}, ${height}, ${window.width}, ${window.height}`);
     //context.drawImage(video, sx, sy, width, height, 0, 0, width, height);
     context.drawImage(video, 0, 0, window.width, window.height);

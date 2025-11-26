@@ -31,6 +31,7 @@ function addPlayer() {
   player.focus();
   // Ensure round appears as we're adding players...
   post();
+  renderQuickStart();
 }
 document.getElementById('add').addEventListener('click', (e) => {
   addPlayer();
@@ -204,32 +205,54 @@ document.getElementById('reset').addEventListener('click', (e) => {
 });
 document.getElementById('player').focus();
 
+let recentPlayerSets = [];
+
+function renderQuickStart() {
+  const quickStartDiv = document.getElementById('quick-start');
+  const container = document.getElementById('quick-start-buttons');
+  container.innerHTML = '';
+
+  // Filter sets that contain all currently added players (order-sensitive prefix match)
+  // Let's assume strict prefix match for now as it's safest for "Quick Start"
+  // If I typed "Alice", I want games starting with "Alice".
+  // If I typed "Alice", "Bob", I want games starting with "Alice", "Bob".
+
+  const currentPlayers = state.players;
+  const filteredSets = recentPlayerSets.filter(set => {
+    if (currentPlayers.length === 0) return true;
+    if (set.length < currentPlayers.length) return false;
+    for (let i = 0; i < currentPlayers.length; i++) {
+      if (set[i] !== currentPlayers[i]) return false;
+    }
+    return true;
+  });
+
+  if (filteredSets.length === 0) {
+    quickStartDiv.style.display = 'none';
+    return;
+  }
+
+  quickStartDiv.style.display = 'block';
+  filteredSets.forEach(players => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'w-full py-2 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700';
+    btn.textContent = players.join(', ');
+    btn.onclick = () => {
+      state.players = [...players];
+      document.getElementById('players').innerHTML = `Players: ${state.players.join(', ')}`;
+      start();
+    };
+    container.appendChild(btn);
+  });
+}
+
 function fetchRecentPlayers() {
   fetch('/api/recent-players')
     .then(response => response.json())
     .then(playerSets => {
-      const quickStartDiv = document.getElementById('quick-start');
-      const container = document.getElementById('quick-start-buttons');
-      container.innerHTML = '';
-
-      if (playerSets.length === 0) {
-        quickStartDiv.style.display = 'none';
-        return;
-      }
-
-      quickStartDiv.style.display = 'block';
-      playerSets.forEach(players => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'w-full py-2 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700';
-        btn.textContent = players.join(', ');
-        btn.onclick = () => {
-          state.players = [...players];
-          document.getElementById('players').innerHTML = `Players: ${state.players.join(', ')}`;
-          start();
-        };
-        container.appendChild(btn);
-      });
+      recentPlayerSets = playerSets;
+      renderQuickStart();
     })
     .catch(err => console.error('Error fetching recent players:', err));
 }

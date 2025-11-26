@@ -97,3 +97,43 @@ exports.replayGame = (req, res) => {
         }
     });
 };
+
+exports.getRecentPlayers = (req, res) => {
+    // Fetch recent games to find unique player sets
+    // We'll fetch a reasonable number of recent games to find 3 unique sets
+    db.all(
+        "SELECT players FROM games ORDER BY startTime DESC LIMIT 20",
+        (err, rows) => {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+
+            const uniqueSets = [];
+            const seenSets = new Set();
+
+            for (const row of rows) {
+                try {
+                    // Normalize player set string for comparison
+                    // We assume the order matters for "Quick Start" as it might imply seating order
+                    // but we should probably treat ["A", "B"] same as ["A", "B"]
+                    // The DB stores them as JSON array string.
+                    const playersStr = row.players;
+
+                    if (!seenSets.has(playersStr)) {
+                        seenSets.add(playersStr);
+                        uniqueSets.push(JSON.parse(playersStr));
+                    }
+
+                    if (uniqueSets.length >= 3) {
+                        break;
+                    }
+                } catch (e) {
+                    console.error("Error parsing players JSON:", e);
+                }
+            }
+
+            res.json(uniqueSets);
+        }
+    );
+};

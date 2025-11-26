@@ -200,8 +200,39 @@ document.getElementById('reset').addEventListener('click', (e) => {
   state.started = false;
   state.startTime = null;
   post();
+  fetchRecentPlayers();
 });
 document.getElementById('player').focus();
+
+function fetchRecentPlayers() {
+  fetch('/api/recent-players')
+    .then(response => response.json())
+    .then(playerSets => {
+      const quickStartDiv = document.getElementById('quick-start');
+      const container = document.getElementById('quick-start-buttons');
+      container.innerHTML = '';
+
+      if (playerSets.length === 0) {
+        quickStartDiv.style.display = 'none';
+        return;
+      }
+
+      quickStartDiv.style.display = 'block';
+      playerSets.forEach(players => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'w-full py-2 text-sm border border-gray-300 rounded hover:bg-gray-50 text-gray-700';
+        btn.textContent = players.join(', ');
+        btn.onclick = () => {
+          state.players = [...players];
+          document.getElementById('players').innerHTML = `Players: ${state.players.join(', ')}`;
+          start();
+        };
+        container.appendChild(btn);
+      });
+    })
+    .catch(err => console.error('Error fetching recent players:', err));
+}
 
 const fullscreenBtn = document.getElementById('fullscreen');
 const iconEnter = document.getElementById('icon-enter');
@@ -273,6 +304,9 @@ socket.on('state', (remoteState) => {
     if (state.started) {
       start();
       checkGameOver(state);
+    }
+    if (state.players.length === 0) {
+      fetchRecentPlayers();
     }
   }
   if (remoteStartTime == null && state.started) {

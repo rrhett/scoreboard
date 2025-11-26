@@ -1,6 +1,6 @@
 {
   "name": "scoreboard",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Score board to display public info (score, etc) during a game",
   "main": "app.js",
   "scripts": {

@@ -12,7 +12,7 @@
     "url": "git+ssh://git@github.com/rrhett/scoreboard.git"
   },
   "author": "Rhett Robinson",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "homepage": "https://github.com/rrhett/scoreboard#readme",
   "dependencies": {
     "express": "^4.21.0",

@@ -1,6 +1,6 @@
 services:
   scoreboard:
-    image: ghcr.io/rrhett/scoreboard${SCOREBOARD_VERSION:-latest}
+    image: ghcr.io/rrhett/scoreboard:${SCOREBOARD_VERSION:-latest}
     ports:
       - 5000:5000
     volumes:

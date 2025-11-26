@@ -49,6 +49,12 @@ wget -O compose.yaml https://github.com/rrhett/scoreboard/releases/latest/downlo
 
 * Populate **SCOREBOARD_VERSION** with the desired version.
 
+Example:
+
+```
+SCOREBOARD_VERSION=v1.0.1
+```
+
 If you wish to always run the latest released image, use the `latest` label.
 Otherwise, browse the [releases](https://github.com/rrhett/scoreboard/releases)
 page to find the version you'd like.

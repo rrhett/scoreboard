@@ -1,10 +1,12 @@
 services:
   scoreboard:
-    image: rrhett/scoreboard
+    image: ghcr.io/rrhett/scoreboard${SCOREBOARD_VERSION:-latest}
     ports:
       - 5000:5000
     volumes:
       - scoreboard-data:/var/lib/scoreboard
+    env_file:
+      - .env
 
 volumes:
   scoreboard-data:

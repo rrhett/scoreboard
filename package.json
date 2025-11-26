@@ -9,11 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/rrhett/scoreboard.git"
+    "url": "git+ssh://git@github.com/rrhett/scoreboard.git"
   },
   "author": "Rhett Robinson",
   "license": "GPL-3.0-or-later",
-  "homepage": "https://bitbucket.org/rrhett/scoreboard#readme",
+  "homepage": "https://github.com/rrhett/scoreboard#readme",
   "dependencies": {
     "express": "^4.21.0",
     "hbs": "^4.2.0",

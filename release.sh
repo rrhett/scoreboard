@@ -62,6 +62,7 @@ jq --arg version "$NEXT_VERSION" '.version = $version' package.json > package.js
 
 # Commit package.json
 git commit -a -m "chore: version v$NEXT_VERSION"
-git tag "v$NEXT_VERSION"
+git push
 
+git tag "v$NEXT_VERSION"
 git push --tags

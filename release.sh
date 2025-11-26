@@ -61,7 +61,7 @@ echo "Pumping version: $VERSION => $NEXT_VERSION"
 jq --arg version "$NEXT_VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
 
 # Commit package.json
-echo git commit -a -m "chore: version v$NEXT_VERSION"
-echo git tag "v$NEXT_VERSION"
+git commit -a -m "chore: version v$NEXT_VERSION"
+git tag "v$NEXT_VERSION"
 
-echo git push --tags
+git push --tags

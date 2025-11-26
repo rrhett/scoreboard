@@ -1,8 +1,5 @@
 const state = {};
 
-exports.updateState = (req, res) => {
-};
-
 exports.home = (req, res) => {
   res.render('home.hbs');
 };

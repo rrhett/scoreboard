@@ -6,7 +6,6 @@ const historyController = require('../controllers/historyController.js');
 router.get('/', appController.home);
 router.get('/control', appController.control);
 router.get('/both', appController.both);
-router.post('/api/state', appController.updateState);
 
 router.get('/scores', historyController.getScoresPage);
 router.get('/api/games', historyController.getGamesApi);

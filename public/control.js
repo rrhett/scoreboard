@@ -100,10 +100,14 @@ function start() {
         }
       }
     });
+    input.addEventListener('blur', (event) => {
+      validateInput(input);
+    });
     input.addEventListener('input', (event) => {
       if (event.inputType && (event.inputType.startsWith('insertText') || event.inputType.startsWith('deleteContent'))) {
         return;
       }
+      // Keep existing auto-correction for convenience, but validation is the authority
       if (input.value === '1') {
         input.value = '3';
       } else if (input.value === '2') {
@@ -111,6 +115,8 @@ function start() {
       } else if (input.value === '-1') {
         input.value = '';
       }
+      // Also validate on input to remove red ring immediately if corrected
+      validateInput(input);
     });
   });
   document.getElementById(`score0`).focus();
@@ -118,21 +124,56 @@ function start() {
 document.getElementById('start').addEventListener('click', (e) => {
   start();
 });
+function validateInput(input) {
+  const val = input.value;
+  // Empty is valid (potential winner)
+  if (val === '') {
+    input.classList.remove('invalid');
+    return true;
+  }
+  const num = parseInt(val, 10);
+  // Must be an integer >= 3 OR exactly 0.
+  // Note: input type="number" allows 'e', '.', etc. so we check if it parses correctly.
+  if (!isNaN(num) && (num === 0 || num >= 3) && Number.isInteger(Number(val))) {
+    input.classList.remove('invalid');
+    return true;
+  }
+  input.classList.add('invalid');
+  return false;
+}
+
 function postScores() {
   const scores = [];
   let winner = -1;
+  let firstInvalid = null;
+
   for (let i = 0; i < state.players.length; ++i) {
-    const player = document.getElementById(`score${i}`);
-    if (player.value == '') {
+    const playerInput = document.getElementById(`score${i}`);
+
+    // Validate first
+    if (!validateInput(playerInput)) {
+      if (!firstInvalid) firstInvalid = playerInput;
+    }
+
+    if (playerInput.value == '') {
       if (winner >= 0) {
         // Only let one player be deemed a winner.
+        // If we already have a winner, this second empty input is invalid contextually,
+        // but validateInput considers it valid in isolation.
+        // Consider some visual way to display this, but for now ignore.
         document.getElementById(`score0`).focus();
         return;
       }
       winner = i;
     }
-    scores.push(parseInt(player.value) || 0);
+    scores.push(parseInt(playerInput.value) || 0);
   }
+
+  if (firstInvalid) {
+    firstInvalid.focus();
+    return;
+  }
+
   document.getElementById(`score0`).focus();
   // Only submit scores if there is a winner (a blank score):
   if (winner == -1) {
@@ -140,6 +181,7 @@ function postScores() {
   }
   for (let i = 0; i < state.players.length; ++i) {
     document.getElementById(`score${i}`).value = '';
+    document.getElementById(`score${i}`).classList.remove('invalid'); // Cleanup
   }
   state.roundWinner.push(winner);
   state.scores.push(scores);
